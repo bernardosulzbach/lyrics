@@ -1,5 +1,4 @@
-import loader
-import songs
+from guesser import songs, loader
 
 
 def print_first_lines(collection, amount):
