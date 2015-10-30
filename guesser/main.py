@@ -35,23 +35,34 @@ def check_if_user_wants_to_play():
 def ask_for_guesses():
     title = input("Guess the song's title: ")
     artist = input("Guess the song's artist: ")
+    print()
     return guesses.Guess(title, artist)
 
 
+def print_score(score):
+    print("Your score so far:", score)
+
+
 def mainloop():
+    score = 0
     while True:
         random_song = songs.Song(**loader.get_random_song())
         shuffle_and_print_first_lines(random_song)
         user_guesses = ask_for_guesses()
         if user_guesses.check_title(random_song) and user_guesses.check_artist(random_song):
             print("You got everything right.")
+            score += 5
         elif user_guesses.check_title(random_song):
             print("You only got the title right.")
+            score += 2
         elif user_guesses.check_artist(random_song):
             print("You only got the artist right.")
+            score += 2
         else:
             print("You are wrong.")
+            score -= 1
         print_song_artist_and_title(random_song)
+        print_score(score)
         if not check_if_user_wants_to_play():
             break
 
