@@ -19,14 +19,18 @@ def print_song_artist_and_title(song):
 
 
 def check_if_user_wants_to_play():
-    positive_answers = ("y", "yes", "yeah", "yup")
-    negative_answers = ("n", "no", "nope", "nah")
+    positive_answers = ("y", "Y") #changed to simple Y/N answers
+    negative_answers = ("n", "N")
     while True:
-        answer = input("Do you want to play again? ")
+        answer = input("Do you want to play again? [Y/N] ") #Added hint for input
         if answer in positive_answers:
             return True
         elif answer in negative_answers:
-            return False
+            answer = input("Are you sure you want to quit? [Y/N]") #Added double check for quitting
+            if answer in positive_answers:
+                return False
+            else:
+                return True
         else:
             print("I don't understand that. Please use one of the following:")
             print(" ", " ".join(positive_answers + negative_answers))
