@@ -17,5 +17,5 @@ class Song(object):
 
 def get_shifted_lyrics(song):
     shifted = collections.deque(song.lyrics)
-    shifted.rotate(random.randint(0, len(shifted)))
+    shifted.rotate(random.randrange(0, len(shifted)))
     return shifted
