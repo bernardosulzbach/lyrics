@@ -1,4 +1,8 @@
 language: python
+addons:
+  apt:
+    packages:
+      - python3-nose
 python:
   - "3.2"
   - "3.3"
