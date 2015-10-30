@@ -1,6 +1,6 @@
 from unittest import TestCase
-from song import Song
-from song import get_shifted_lyrics
+from songs import Song
+from songs import get_shifted_lyrics
 
 
 class TestSongFunctions(TestCase):

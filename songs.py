@@ -1,6 +1,7 @@
 import collections
 import random
 
+
 class Song(object):
     def __init__(self, artist, name, lyrics):
         assert isinstance(artist, str), "artist should be a string"
