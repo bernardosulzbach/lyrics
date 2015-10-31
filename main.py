@@ -24,7 +24,7 @@ def check_if_user_wants_to_play():
     positive_answers = ("y", "yes", "yeah", "yup")
     negative_answers = ("n", "no", "nope", "nah")
     while True:
-        answer = input("Do you want to play again? ")
+        answer = input("Do you want to play again? ").lower()
         if answer in positive_answers:
             return True
         elif answer in negative_answers:
