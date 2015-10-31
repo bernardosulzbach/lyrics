@@ -7,9 +7,17 @@ It shows you a part of a song and you must guess what it is.
 
 Just issue
 
-    $ python3 guesser/main.py
+    $ python3 main.py
 
 to play the game.
+
+## Developing
+
+You can use
+
+    $ nosetests3
+
+to run all tests.
 
 ## Project Structure
 Directory   |  description

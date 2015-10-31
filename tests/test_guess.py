@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-import guesser.guesses
 import guesser.songs
+import guesser.guesses
 
 
 class TestGuess(TestCase):

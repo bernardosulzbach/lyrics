@@ -1,6 +1,8 @@
-import songs
-import guesses
-import loader
+import logging
+
+import guesser.guesses
+import guesser.loader
+import guesser.songs
 
 
 def print_first_lines(collection, amount):
@@ -10,7 +12,7 @@ def print_first_lines(collection, amount):
 
 def shuffle_and_print_first_lines(song):
     print()
-    print_first_lines(songs.get_shifted_lyrics(song), 2)
+    print_first_lines(guesser.songs.get_shifted_lyrics(song), 2)
     print()
 
 
@@ -36,17 +38,21 @@ def ask_for_guesses():
     title = input("Guess the song's title: ")
     artist = input("Guess the song's artist: ")
     print()
-    return guesses.Guess(title, artist)
+    return guesser.guesses.Guess(title, artist)
 
 
 def print_score(score):
     print("Your score so far:", score)
 
 
+def initialize_logger():
+    logging.basicConfig(filename="log.log", format="%(asctime)-15s %(levelname)s %(message)s", level=logging.DEBUG)
+
+
 def mainloop():
     score = 0
     while True:
-        random_song = songs.Song(**loader.get_random_song())
+        random_song = guesser.songs.Song(**guesser.loader.get_random_song())
         shuffle_and_print_first_lines(random_song)
         user_guesses = ask_for_guesses()
         if user_guesses.check_title(random_song) and user_guesses.check_artist(random_song):
@@ -68,4 +74,5 @@ def mainloop():
 
 
 if __name__ == '__main__':
+    initialize_logger()
     mainloop()

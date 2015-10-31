@@ -2,8 +2,14 @@
 # The first line of the text file identifies the artist, the second one identifies the title of the opus, and the
 # remaining text represents the lyrics.
 
-import os
 import json
+import logging
+import os
+
+
+def get_sources_path():
+    path = os.path.join(os.path.dirname(__file__), "..", "sources")
+    return path
 
 
 def read_lines_from_file(filename):
@@ -26,10 +32,12 @@ def json_from_file(filename):
     return {"artist": prepared_lines[0], "title": prepared_lines[1], "lyrics": prepared_lines[2:]}
 
 
-if __name__ == '__main__':
+def make_lyrics_file(path):
+    logging.debug("Started making the lyrics file.")
     json_list = []
-    sources_folder = os.path.join(os.path.dirname(__file__), "..", "sources")
+    sources_folder = get_sources_path()
     for file in os.listdir(sources_folder):
         json_list.append(json_from_file(os.path.join(sources_folder, file)))
-    with open('lyrics.json', 'w') as output:
+    with open(path, 'w') as output:
         json.dump({"songs": json_list}, output)
+    logging.debug("Finished making the lyrics file.")
