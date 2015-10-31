@@ -1,11 +1,11 @@
 from unittest import TestCase
 
-import guesser.loader
+import guesser.logic.loader
 
 
 class TestResources(TestCase):
     def test_resources(self):
-        all_songs = guesser.loader.get_all_songs()
+        all_songs = guesser.logic.loader.get_all_songs()
         for song in all_songs:
             for field in (song["artist"], song["title"]):
                 self.assertEquals(field, field.strip())

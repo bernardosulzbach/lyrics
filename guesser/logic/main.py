@@ -1,6 +1,4 @@
-import guesses
-import songs
-import loader
+from logic import songs, guesses, loader
 
 
 def print_first_lines(collection, amount):

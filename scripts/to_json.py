@@ -1,10 +1,12 @@
+# The file that converts all plain text lyrics into JSON.
+# The first line of the text file identifies the artist, the second one identifies the title of the opus, and the
+# remaining text represents the lyrics.
+
 import json
 
 
 def read_lines_from_file(filename):
-    text = open('lyrics.txt').read()
-    lines = text.split('\n')
-    return lines
+    return open(filename).readlines()
 
 
 def get_clean_lines_from_file(filename):
