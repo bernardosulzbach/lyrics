@@ -2,6 +2,7 @@
 # The first line of the text file identifies the artist, the second one identifies the title of the opus, and the
 # remaining text represents the lyrics.
 
+import os
 import json
 
 
@@ -18,8 +19,17 @@ def get_clean_lines_from_file(filename):
     return lines
 
 
+def json_from_file(filename):
+    prepared_lines = get_clean_lines_from_file(filename)
+    if len(prepared_lines) < 3:
+        raise Exception("Only got {} prepared lines from {}. Expected at least 3.".format(len(prepared_lines), filename))
+    return {"artist": prepared_lines[0], "title": prepared_lines[1], "lyrics": prepared_lines[2:]}
+
+
 if __name__ == '__main__':
-    prepared_lines = get_clean_lines_from_file('lyrics.txt')
-    output = open('lyrics.json', 'w')
-    dictionary = {"artist": prepared_lines[0], "title": prepared_lines[1], "lyrics": prepared_lines[2:]}
-    json.dump(dictionary, output)
+    json_list = []
+    sources_folder = os.path.join(os.path.dirname(__file__), "sources")
+    for file in os.listdir(sources_folder):
+        json_list.append(json_from_file(os.path.join(sources_folder, file)))
+    with open('lyrics.json', 'w') as output:
+        json.dump({"songs": json_list}, output)
