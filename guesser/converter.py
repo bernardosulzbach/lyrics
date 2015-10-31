@@ -22,13 +22,13 @@ def get_clean_lines_from_file(filename):
 def json_from_file(filename):
     prepared_lines = get_clean_lines_from_file(filename)
     if len(prepared_lines) < 3:
-        raise Exception("Only got {} prepared lines from {}. Expected at least 3.".format(len(prepared_lines), filename))
+        raise Exception("Only got {} lines from {}. Expected at least 3.".format(len(prepared_lines), filename))
     return {"artist": prepared_lines[0], "title": prepared_lines[1], "lyrics": prepared_lines[2:]}
 
 
 if __name__ == '__main__':
     json_list = []
-    sources_folder = os.path.join(os.path.dirname(__file__), "sources")
+    sources_folder = os.path.join(os.path.dirname(__file__), "..", "sources")
     for file in os.listdir(sources_folder):
         json_list.append(json_from_file(os.path.join(sources_folder, file)))
     with open('lyrics.json', 'w') as output:

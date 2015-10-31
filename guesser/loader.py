@@ -6,7 +6,7 @@ import os
 def get_lyrics_json_path():
     """Returns the path of lyrics.json."""
     cur_dir = os.path.dirname(__file__)
-    lyrics_json = os.path.join(cur_dir, "..", "data", "lyrics.json")
+    lyrics_json = os.path.join(cur_dir, "lyrics.json")
     return lyrics_json
 
 
