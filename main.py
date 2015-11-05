@@ -20,18 +20,42 @@ def print_song_artist_and_title(song):
     print("That was", song.title, "by", song.artist + ".")
 
 
+def get_affirmative_answers():
+    return "1", "y", "yes", "yeah", "yup", "sure", "obviously"
+
+
+def get_negative_answers():
+    return "0", "n", "no", "nope", "nah"
+
+
+def get_all_answers():
+    return get_affirmative_answers() + get_negative_answers()
+
+
+def parse_user_affirmative_or_negative(string):
+    """
+    Parses a string attempting to determine whether it is an affirmative or negative answer. Raises a ValueError if it
+    cannot be parsed.
+    :param string: the answer
+    :return: whether or not the string is an affirmative answer
+    """
+    if string.lower() in get_affirmative_answers():
+        return True
+    elif string.lower() in get_negative_answers():
+        return False
+    else:
+        raise ValueError("string '{}' does not match any registered answer.".format(string))
+
+
 def check_if_user_wants_to_play():
-    positive_answers = ("y", "yes", "yeah", "yup")
-    negative_answers = ("n", "no", "nope", "nah")
     while True:
-        answer = input("Do you want to play again? ").lower()
-        if answer in positive_answers:
-            return True
-        elif answer in negative_answers:
-            return False
-        else:
-            print("I don't understand that. Please use one of the following:")
-            print(" ", " ".join(positive_answers + negative_answers))
+        answer = input("Do you want to play again? ")
+        try:
+            return parse_user_affirmative_or_negative(answer)
+        except ValueError:
+            print("I don't understand that. But I understand all of these:")
+            print(" ", "Affirmatives:", " ".join(get_affirmative_answers()))
+            print(" ", "Negatives:", " ".join(get_negative_answers()))
 
 
 def ask_for_guesses():
