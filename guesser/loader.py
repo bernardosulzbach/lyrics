@@ -43,7 +43,6 @@ def get_all_songs():
     """Retrieves all songs as dictionaries containing artist, title, and lyrics."""
     ensure_the_lyrics_file_exists_and_is_up_to_date()
     lyrics_file = open(get_lyrics_json_path())
-    ensure_the_lyrics_file_exists_and_is_up_to_date()
     song_list = json.load(lyrics_file)["songs"]
     return song_list
 
