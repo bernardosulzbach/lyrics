@@ -36,8 +36,9 @@ def make_lyrics_file(path):
     logging.debug("Started making the lyrics file.")
     json_list = []
     sources_folder = get_sources_path()
-    for file in os.listdir(sources_folder):
-        json_list.append(json_from_file(os.path.join(sources_folder, file)))
+    for root, directories, files in os.walk(sources_folder):
+        for file in files:
+            json_list.append(json_from_file(os.path.join(root, file)))
     with open(path, 'w') as output:
         json.dump({"songs": json_list}, output)
     logging.debug("Finished making the lyrics file.")
