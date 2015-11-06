@@ -121,9 +121,7 @@ def get_database_connection():
 
 def get_score(connection):
     score = connection.cursor().execute("select sum(score_delta) from playing_data").fetchone()[0]
-    if score is None:
-        score = 0
-    return score
+    return score if score is not None else 0
 
 
 def update_database(connection, song, bought, got_artist_right, got_title_right, score_delta):
