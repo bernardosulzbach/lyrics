@@ -44,3 +44,4 @@ tmtagsHistory
 ####################
 **/lyrics.json
 *.sqlite3
+!demonstrations/*.sqlite3
