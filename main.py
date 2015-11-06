@@ -5,17 +5,6 @@ import guesser.loader
 import guesser.songs
 
 
-def print_first_lines(collection, amount):
-    for i in range(amount):
-        print(collection[i])
-
-
-def shuffle_and_print_first_lines(song):
-    print()
-    print_first_lines(guesser.songs.get_shifted_lyrics(song), 2)
-    print()
-
-
 def print_song_artist_and_title(song):
     print("That was", song.title, "by", song.artist + ".")
 
@@ -73,11 +62,48 @@ def initialize_logger():
     logging.basicConfig(filename="log.log", format="%(asctime)-15s %(levelname)s %(message)s", level=logging.DEBUG)
 
 
+def acquisition_loop(random_song):
+    """
+    The loop that allows the player to buy more lines.
+    :return: the cost of the player's acquisitions
+    """
+    revealed = 2  # Keep track of how many lines the user has revealed.
+    shifted_lyrics = guesser.songs.ShiftedLyrics(random_song.lyrics)
+    while True:
+        print_lyrics(shifted_lyrics, revealed)
+        acquisition = input("Acquire this many lines: ")
+        try:
+            acquisition = int(acquisition)
+        except ValueError:
+            print("Enter a number.")
+            continue
+        if acquisition <= 0:
+            break
+        else:
+            not_yet_acquired = shifted_lyrics.get_line_count() - revealed
+            if acquisition > not_yet_acquired:
+                print("{0} is enough to buy the rest of the song. You only spent {0} points.".format(not_yet_acquired))
+            revealed += min(acquisition, not_yet_acquired)
+            if revealed == shifted_lyrics.get_line_count():
+                break
+    return - (revealed - 2)
+
+
+def print_lyrics(shifted_lyrics, unlocked):
+    """
+    Print the first unlocked lines from a ShiftedLyrics object.
+    """
+    print()
+    for line in shifted_lyrics.get(unlocked):
+        print("   ", line)
+    print()
+
+
 def mainloop():
     score = 0
     while True:
         random_song = guesser.songs.Song(**guesser.loader.get_random_song())
-        shuffle_and_print_first_lines(random_song)
+        score += acquisition_loop(random_song)
         user_guesses = ask_for_guesses()
         if user_guesses.check_title(random_song) and user_guesses.check_artist(random_song):
             print("You got everything right.")
