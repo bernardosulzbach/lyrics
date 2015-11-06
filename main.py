@@ -100,6 +100,32 @@ def print_lyrics(shifted_lyrics, unlocked):
     print()
 
 
+def get_database_connection():
+    """
+    Returns the connection to the database and also ensures that all expected tables and indices are there.
+    """
+    # This isolation level enables autocommit. This way, the connection commits after every executed statement.
+    connection = sqlite3.connect('data.sqlite3', isolation_level=None)
+    cursor = connection.cursor()
+    # The optional if not exists clause makes the operation a no-op if the table or index is already there.
+    cursor.execute("""create table if not exists playing_data (id integer primary key,
+                                                               artist text not null,
+                                                               title text not null,
+                                                               bought integer not null,
+                                                               got_artist_right integer not null,
+                                                               got_title_right integer not null,
+                                                               score_delta integer not null)""")
+    cursor.execute("""create index if not exists playing_data_score_delta on playing_data (score_delta)""")
+    return connection
+
+
+def get_score(connection):
+    score = connection.cursor().execute("select sum(score_delta) from playing_data").fetchone()[0]
+    if score is None:
+        score = 0
+    return score
+
+
 def update_database(connection, song, bought, got_artist_right, got_title_right, score_delta):
     columns = "(artist, title, bought, got_artist_right, got_title_right, score_delta)"
     insert = "insert into playing_data {} values (?, ?, ?, ?, ?, ?)".format(columns)
@@ -108,21 +134,14 @@ def update_database(connection, song, bought, got_artist_right, got_title_right,
 
 
 def mainloop():
-    connection = sqlite3.connect('data.sqlite3')
-    cursor = connection.cursor()
-    # artist | title | bought | got_artist_right | got_title_right | score_diff
-    cursor.execute("""create table if not exists playing_data (id integer primary key,
-                                                               artist text not null,
-                                                               title text not null,
-                                                               bought integer not null,
-                                                               got_artist_right integer not null,
-                                                               got_title_right integer not null,
-                                                               score_delta integer not null)""")
-    score = cursor.execute("select sum(score_delta) from playing_data").fetchone()[0]
-    if score is None:
-        score = 0
+    connection = get_database_connection()
+    score = get_score(connection)
+    acquisition_loop_called = False
     while True:
         random_song = guesser.songs.Song(**guesser.loader.get_random_song())
+        if not acquisition_loop_called:
+            logging.debug("Calling acquisition_loop for the first time.")
+            acquisition_loop_called = True
         bought = acquisition_loop(random_song)
         user_guesses = ask_for_guesses()
         got_artist_right = user_guesses.check_artist(random_song)
@@ -145,10 +164,11 @@ def mainloop():
         score += score_delta
         print_score(score)
         if not check_if_user_wants_to_play():
-            connection.commit()
+            connection.close()
             break
 
 
 if __name__ == '__main__':
     initialize_logger()
+    logging.debug("Finished initializing the logger.")
     mainloop()
