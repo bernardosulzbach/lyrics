@@ -10,6 +10,6 @@ class TestResources(TestCase):
             for field in (song["artist"], song["title"]):
                 self.assertEquals(field, field.strip())
             trimmed_lyrics = list(song["lyrics"])
-            self.assertTrue(len(trimmed_lyrics) > 0, "song must have at least one line.")
+            self.assertTrue(len(trimmed_lyrics) >= 2, "song must have at least two lines.")
             map(lambda string: string.stip(), trimmed_lyrics)
             self.assertSequenceEqual(song["lyrics"], trimmed_lyrics)

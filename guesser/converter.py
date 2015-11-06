@@ -27,8 +27,8 @@ def get_clean_lines_from_file(filename):
 
 def json_from_file(filename):
     prepared_lines = get_clean_lines_from_file(filename)
-    if len(prepared_lines) < 3:
-        raise Exception("Only got {} lines from {}. Expected at least 3.".format(len(prepared_lines), filename))
+    if len(prepared_lines) < 4:
+        raise Exception("Only got {} lines from {}. Expected at least 4.".format(len(prepared_lines), filename))
     return {"artist": prepared_lines[0], "title": prepared_lines[1], "lyrics": prepared_lines[2:]}
 
 

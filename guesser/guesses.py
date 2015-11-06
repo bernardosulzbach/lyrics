@@ -1,10 +1,10 @@
 class Guess(object):
-    def __init__(self, title, artist):
-        self.title = title
+    def __init__(self, artist, title):
         self.artist = artist
-
-    def check_title(self, song):
-        return self.title.lower() == song.title.lower()
+        self.title = title
 
     def check_artist(self, song):
         return self.artist.lower() == song.artist.lower()
+
+    def check_title(self, song):
+        return self.title.lower() == song.title.lower()

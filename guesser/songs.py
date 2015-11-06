@@ -9,7 +9,7 @@ class Song(object):
         assert isinstance(title, str), "title should be a string"
         assert len(title) > 0, "title should have at least one character"
         assert isinstance(lyrics, list), "lyrics should be a list"
-        # Note that lyrics may be empty logically.
+        assert len(lyrics) >= 2, "song should have at least two lines"
         self.artist = artist
         self.title = title
         self.lyrics = lyrics

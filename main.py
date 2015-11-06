@@ -1,4 +1,5 @@
 import logging
+import sqlite3
 
 import guesser.guesses
 import guesser.loader
@@ -48,10 +49,10 @@ def check_if_user_wants_to_play():
 
 
 def ask_for_guesses():
-    title = input("Guess the song's title: ")
     artist = input("Guess the song's artist: ")
+    title = input("Guess the song's title: ")
     print()
-    return guesser.guesses.Guess(title, artist)
+    return guesser.guesses.Guess(artist, title)
 
 
 def print_score(score):
@@ -65,7 +66,7 @@ def initialize_logger():
 def acquisition_loop(random_song):
     """
     The loop that allows the player to buy more lines.
-    :return: the cost of the player's acquisitions
+    :return: how many lines the player bought
     """
     revealed = 2  # Keep track of how many lines the user has revealed.
     shifted_lyrics = guesser.songs.ShiftedLyrics(random_song.lyrics)
@@ -86,7 +87,7 @@ def acquisition_loop(random_song):
             revealed += min(acquisition, not_yet_acquired)
             if revealed == shifted_lyrics.get_line_count():
                 break
-    return - (revealed - 2)
+    return revealed - 2
 
 
 def print_lyrics(shifted_lyrics, unlocked):
@@ -99,27 +100,52 @@ def print_lyrics(shifted_lyrics, unlocked):
     print()
 
 
+def update_database(connection, song, bought, got_artist_right, got_title_right, score_delta):
+    columns = "(artist, title, bought, got_artist_right, got_title_right, score_delta)"
+    insert = "insert into playing_data {} values (?, ?, ?, ?, ?, ?)".format(columns)
+    cursor = connection.cursor()
+    cursor.execute(insert, (song.artist, song.title, bought, got_artist_right, got_title_right, score_delta))
+
+
 def mainloop():
-    score = 0
+    connection = sqlite3.connect('data.sqlite3')
+    cursor = connection.cursor()
+    # artist | title | bought | got_artist_right | got_title_right | score_diff
+    cursor.execute("""create table if not exists playing_data (id integer primary key,
+                                                               artist text not null,
+                                                               title text not null,
+                                                               bought integer not null,
+                                                               got_artist_right integer not null,
+                                                               got_title_right integer not null,
+                                                               score_delta integer not null)""")
+    score = cursor.execute("select sum(score_delta) from playing_data").fetchone()[0]
+    if score is None:
+        score = 0
     while True:
         random_song = guesser.songs.Song(**guesser.loader.get_random_song())
-        score += acquisition_loop(random_song)
+        bought = acquisition_loop(random_song)
         user_guesses = ask_for_guesses()
-        if user_guesses.check_title(random_song) and user_guesses.check_artist(random_song):
+        got_artist_right = user_guesses.check_artist(random_song)
+        got_title_right = user_guesses.check_title(random_song)
+        score_delta = -bought
+        if got_title_right and got_artist_right:
             print("You got everything right.")
-            score += 5
-        elif user_guesses.check_title(random_song):
-            print("You only got the title right.")
-            score += 2
-        elif user_guesses.check_artist(random_song):
+            score_delta += 5
+        elif got_artist_right:
             print("You only got the artist right.")
-            score += 2
+            score_delta += 2
+        elif got_title_right:
+            print("You only got the title right.")
+            score_delta += 2
         else:
             print("You are wrong.")
-            score -= 1
+            score_delta -= 1
+        update_database(connection, random_song, bought, got_artist_right, got_title_right, score_delta)
         print_song_artist_and_title(random_song)
+        score += score_delta
         print_score(score)
         if not check_if_user_wants_to_play():
+            connection.commit()
             break
 
 
