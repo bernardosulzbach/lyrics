@@ -43,3 +43,4 @@ tmtagsHistory
 # Project specific #
 ####################
 **/lyrics.json
+*.sqlite3
