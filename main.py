@@ -1,5 +1,6 @@
 import logging
 import sqlite3
+import sys
 
 import guesser.guesses
 import guesser.loader
@@ -166,7 +167,20 @@ def mainloop():
             break
 
 
+def print_help():
+    print("\nlyric-guesser by Bernardo Sulzbach (mafagafogigante@gmail.com)\n"
+          "You get to see two lines from the lyrics of a random song.\n"
+          "Then you can buy more lines until you opt to guess the song's artist and title.\n"
+          "Buying lines cost you points that you can earn by guessing correctly.\n"
+          "\nThe main idea is this simple. Really.\n"
+          "\nHow wrong can you be and still be correct.\n"
+          "> You can mistake up to half the words (rounded down) by a single character.\n")
+
+
 if __name__ == '__main__':
-    initialize_logger()
-    logging.debug("Finished initializing the logger.")
-    mainloop()
+    if len(sys.argv) > 1 and sys.argv[1] == '--help':
+        print_help()
+    else:
+        initialize_logger()
+        logging.debug("Finished initializing the logger.")
+        mainloop()
