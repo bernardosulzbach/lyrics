@@ -183,4 +183,9 @@ if __name__ == '__main__':
     else:
         initialize_logger()
         logging.debug("Finished initializing the logger.")
-        mainloop()
+        try:
+            mainloop()
+            sys.exit(0)
+        except Exception:
+            logging.exception("Caught exception from mainloop().")
+            sys.exit(1)
