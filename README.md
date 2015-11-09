@@ -39,6 +39,6 @@ is just annoying.
 ## Project Structure
 Directory   |  description
 ------------|-----------------------------------------------------
-`guesser/`  |  contains all application logic.
 `sources/`  |  has all text files required to generate the lyrics.
+`lyrics/`   |  contains all application logic.
 `tests/`    |  contains all the tests.

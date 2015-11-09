@@ -2,9 +2,9 @@ import logging
 import sqlite3
 import sys
 
-import guesser.guesses
-import guesser.loader
-import guesser.songs
+import lyrics.guesses
+import lyrics.loader
+import lyrics.songs
 
 
 def print_song_artist_and_title(song):
@@ -53,7 +53,7 @@ def ask_for_guesses():
     artist = input("Guess the song's artist: ")
     title = input("Guess the song's title: ")
     print()
-    return guesser.guesses.Guess(artist, title)
+    return lyrics.guesses.Guess(artist, title)
 
 
 def print_score(score):
@@ -70,7 +70,7 @@ def acquisition_loop(random_song):
     :return: how many lines the player bought
     """
     revealed = 2  # Keep track of how many lines the user has revealed.
-    shifted_lyrics = guesser.songs.ShiftedLyrics(random_song.lyrics)
+    shifted_lyrics = lyrics.songs.ShiftedLyrics(random_song.lyrics)
     while True:
         print_lyrics(shifted_lyrics, revealed)
         acquisition = input("Acquire this many lines: ")
@@ -137,7 +137,7 @@ def mainloop():
     score = get_score(connection)
     acquisition_loop_called = False
     while True:
-        random_song = guesser.songs.Song(**guesser.loader.get_random_song())
+        random_song = lyrics.songs.Song(**lyrics.loader.get_random_song())
         if not acquisition_loop_called:
             logging.debug("Calling acquisition_loop for the first time.")
             acquisition_loop_called = True
@@ -168,7 +168,7 @@ def mainloop():
 
 
 def print_help():
-    print("\nlyric-guesser by Bernardo Sulzbach (mafagafogigante@gmail.com)\n"
+    print("\nlyrics by Bernardo Sulzbach (mafagafogigante@gmail.com)\n"
           "You get to see two lines from the lyrics of a random song.\n"
           "Then you can buy more lines until you opt to guess the song's artist and title.\n"
           "Buying lines cost you points that you can earn by guessing correctly.\n"

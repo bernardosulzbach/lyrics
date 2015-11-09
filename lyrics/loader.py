@@ -3,7 +3,7 @@ import logging
 import os
 import random
 
-import guesser.converter
+import lyrics.converter
 
 
 def get_lyrics_json_path():
@@ -14,7 +14,7 @@ def get_lyrics_json_path():
 
 
 def make_lyrics_file():
-    guesser.converter.make_lyrics_file(get_lyrics_json_path())
+    lyrics.converter.make_lyrics_file(get_lyrics_json_path())
 
 
 def ensure_the_lyrics_file_exists():
@@ -28,7 +28,7 @@ def ensure_the_lyrics_file_exists():
 
 def ensure_the_lyrics_file_is_up_to_date():
     json_modification_time = os.stat(get_lyrics_json_path()).st_mtime
-    sources_modification_time = os.stat(guesser.converter.get_sources_path()).st_mtime
+    sources_modification_time = os.stat(lyrics.converter.get_sources_path()).st_mtime
     if sources_modification_time > json_modification_time:
         logging.info("Lyrics file is outdated. Triggering remake.")
         make_lyrics_file()
