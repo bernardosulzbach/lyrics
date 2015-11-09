@@ -28,7 +28,6 @@ is just annoying.
 ## Project Structure
 Directory   |  description
 ------------|-----------------------------------------------------
-`gatherer/` |  contains a stub for the Scrapy crawler.
 `guesser/`  |  contains all application logic.
 `sources/`  |  has all text files required to generate the lyrics.
 `tests/`    |  contains all the tests.
