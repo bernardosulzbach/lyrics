@@ -24,11 +24,7 @@ to play the game in the folder of the game.
 
 ## Developing
 
-You can use
-
-    $ nosetests3
-
-to run all tests.
+Follow PEP-8 and remember to check that all tests pass before opening a PR.
 
 ## Adding, maintaining lyrics
 
