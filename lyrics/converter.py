@@ -13,7 +13,7 @@ def get_sources_path():
 
 
 def read_lines_from_file(filename):
-    return open(filename).readlines()
+    return open(filename, encoding="utf-8").readlines()
 
 
 def get_clean_lines_from_file(filename):
