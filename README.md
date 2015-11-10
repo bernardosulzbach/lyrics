@@ -32,9 +32,7 @@ to run all tests.
 
 ## Adding, maintaining lyrics
 
-Do not mention that a song is a cover. I foresee this being an issue, but
-having to say that something is a cover and remembering whose the original is
-is just annoying.
+Do not add covers. Only original songs are allowed.
 
 ## Project Structure
 Directory   |  description
