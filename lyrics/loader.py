@@ -46,6 +46,7 @@ def ensure_the_lyrics_file_exists_and_is_up_to_date():
 def get_all_songs():
     """Retrieves all songs as dictionaries containing artist, title, and lyrics."""
     global json_file, json_file_is_up_to_date
+    ensure_the_lyrics_file_exists_and_is_up_to_date()
     if not json_file_is_up_to_date:
         json_file = json.load(open(get_lyrics_json_path()))
         json_file_is_up_to_date = True
