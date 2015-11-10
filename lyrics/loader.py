@@ -2,8 +2,10 @@ import json
 import logging
 import os
 import random
-
 import lyrics.converter
+
+json_file = None
+json_file_is_up_to_date = False
 
 
 def get_lyrics_json_path():
@@ -14,7 +16,9 @@ def get_lyrics_json_path():
 
 
 def make_lyrics_file():
+    global json_file_is_up_to_date
     lyrics.converter.make_lyrics_file(get_lyrics_json_path())
+    json_file_is_up_to_date = False
 
 
 def ensure_the_lyrics_file_exists():
@@ -41,10 +45,11 @@ def ensure_the_lyrics_file_exists_and_is_up_to_date():
 
 def get_all_songs():
     """Retrieves all songs as dictionaries containing artist, title, and lyrics."""
-    ensure_the_lyrics_file_exists_and_is_up_to_date()
-    lyrics_file = open(get_lyrics_json_path())
-    song_list = json.load(lyrics_file)["songs"]
-    return song_list
+    global json_file, json_file_is_up_to_date
+    if not json_file_is_up_to_date:
+        json_file = json.load(open(get_lyrics_json_path()))
+        json_file_is_up_to_date = True
+    return json_file["songs"]
 
 
 def get_random_song():
