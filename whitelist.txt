@@ -1,0 +1,11 @@
+# Enter below the name of the artists you want to get songs from.
+# You can just comment out with '#' to prevent these artists from being selected.
+
+a day to remember
+bring me the horizon
+dream theater
+foo fighters
+rise against
+taylor swift
+the mountain goats
+the smashing pumpkins
