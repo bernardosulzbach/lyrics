@@ -73,6 +73,8 @@ def acquisition_loop(random_song):
     shifted_lyrics = lyrics.songs.ShiftedLyrics(random_song.lyrics)
     while True:
         print_lyrics(shifted_lyrics, revealed)
+        if revealed == shifted_lyrics.get_line_count():
+            break
         acquisition = input("Acquire this many lines: ")
         try:
             acquisition = int(acquisition)
@@ -86,8 +88,6 @@ def acquisition_loop(random_song):
             if acquisition > not_yet_acquired:
                 print("{0} is enough to buy the rest of the song. You only spent {0} points.".format(not_yet_acquired))
             revealed += min(acquisition, not_yet_acquired)
-            if revealed == shifted_lyrics.get_line_count():
-                break
     return revealed - 2
 
 
